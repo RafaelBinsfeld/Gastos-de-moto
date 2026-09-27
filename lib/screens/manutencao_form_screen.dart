@@ -159,7 +159,7 @@ class _ManutencaoFormScreenState extends State<ManutencaoFormScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              value: _tipoServico,
+              initialValue: _tipoServico,
               decoration: const InputDecoration(
                 labelText: 'Tipo de serviço',
                 border: OutlineInputBorder(),

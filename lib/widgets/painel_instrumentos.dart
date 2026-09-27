@@ -35,20 +35,20 @@ class PainelInstrumentos extends StatelessWidget {
       decoration: BoxDecoration(
         color: CoresApp.grafite,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.white.withOpacity(0.08), width: 1.5),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.08), width: 1.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              MotoAvatar(moto: moto, raio: 16, corFundo: Colors.white.withOpacity(0.08)),
+              MotoAvatar(moto: moto, raio: 16, corFundo: Colors.white.withValues(alpha: 0.08)),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   moto.nome.toUpperCase(),
                   style: textTheme.labelMedium?.copyWith(
-                    color: Colors.white.withOpacity(0.65),
+                    color: Colors.white.withValues(alpha: 0.65),
                     letterSpacing: 1.2,
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -61,7 +61,7 @@ class PainelInstrumentos extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(child: _buildLeitura(context, 'KM ATUAL', quilometragemAtual.toStringAsFixed(0), CoresApp.ambarPainel)),
-              Container(width: 1, height: 44, color: Colors.white.withOpacity(0.1)),
+              Container(width: 1, height: 44, color: Colors.white.withValues(alpha: 0.1)),
               Expanded(
                 child: _buildLeitura(
                   context,
@@ -87,7 +87,7 @@ class PainelInstrumentos extends StatelessWidget {
         Text(
           rotulo,
           style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                color: Colors.white.withOpacity(0.5),
+                color: Colors.white.withValues(alpha: 0.5),
                 letterSpacing: 1,
               ),
         ),
@@ -101,7 +101,7 @@ class PainelInstrumentos extends StatelessWidget {
               ),
               TextSpan(
                 text: sufixo,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Colors.white.withOpacity(0.5)),
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Colors.white.withValues(alpha: 0.5)),
               ),
             ],
           ),
@@ -117,17 +117,17 @@ class PainelInstrumentos extends StatelessWidget {
       return Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           children: [
-            Icon(Icons.info_outline, color: Colors.white.withOpacity(0.5), size: 18),
+            Icon(Icons.info_outline, color: Colors.white.withValues(alpha: 0.5), size: 18),
             const SizedBox(width: 10),
             Expanded(
               child: Text(
                 'Registre uma troca de óleo para habilitar o alerta.',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white.withOpacity(0.6)),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white.withValues(alpha: 0.6)),
               ),
             ),
           ],
@@ -162,7 +162,7 @@ class PainelInstrumentos extends StatelessWidget {
           child: CustomPaint(
             painter: _MedidorArcoPainter(
               progresso: progresso,
-              corTrilha: Colors.white.withOpacity(0.12),
+              corTrilha: Colors.white.withValues(alpha: 0.12),
               corProgresso: corStatus,
             ),
           ),
@@ -181,7 +181,7 @@ class PainelInstrumentos extends StatelessWidget {
                 alerta.status == StatusTrocaOleo.vencida
                     ? 'passou ${(-alerta.quilometragemRestante).toStringAsFixed(0)} km do previsto'
                     : 'faltam ${alerta.quilometragemRestante.toStringAsFixed(0)} km',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white.withOpacity(0.7)),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white.withValues(alpha: 0.7)),
               ),
             ],
           ),

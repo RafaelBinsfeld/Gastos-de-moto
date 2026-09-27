@@ -128,7 +128,7 @@ class _LinhaRegistro extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       child: Row(
                         children: [
-                          Icon(icone, size: 20, color: cs.onSurface.withOpacity(0.6)),
+                          Icon(icone, size: 20, color: cs.onSurface.withValues(alpha: 0.6)),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
@@ -145,7 +145,7 @@ class _LinhaRegistro extends StatelessWidget {
                             Text(valorTrailing!, style: Theme.of(context).textTheme.titleSmall),
                           ],
                           const SizedBox(width: 6),
-                          Icon(Icons.chevron_right, size: 18, color: cs.onSurface.withOpacity(0.35)),
+                          Icon(Icons.chevron_right, size: 18, color: cs.onSurface.withValues(alpha: 0.35)),
                         ],
                       ),
                     ),
@@ -194,12 +194,12 @@ class EstadoVazioRegistro extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 32),
       child: Column(
         children: [
-          Icon(icone, size: 32, color: cs.onSurface.withOpacity(0.3)),
+          Icon(icone, size: 32, color: cs.onSurface.withValues(alpha: 0.3)),
           const SizedBox(height: 10),
           Text(
             mensagem,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: cs.onSurface.withOpacity(0.6)),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: cs.onSurface.withValues(alpha: 0.6)),
           ),
         ],
       ),

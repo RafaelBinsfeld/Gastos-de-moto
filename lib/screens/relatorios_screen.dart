@@ -352,7 +352,7 @@ class _RelatoriosScreenState extends State<RelatoriosScreen> {
                   dotData: const FlDotData(show: true),
                   belowBarData: BarAreaData(
                     show: true,
-                    color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
+                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
                   ),
                 ),
               ],

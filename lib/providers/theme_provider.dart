@@ -3,13 +3,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider extends ChangeNotifier {
   static const String _keyColor = 'selected_theme_color';
-  
-  // Cor padrão inicial (Amarelo)
+  static const String _keyMode = 'selected_theme_mode';
+
   Color _primaryColor = Colors.amber;
+  ThemeMode _modo = ThemeMode.dark;
 
   Color get primaryColor => _primaryColor;
+  ThemeMode get modo => _modo;
 
-  // Lista de cores disponíveis para o usuário escolher
   List<Color> get availableColors => const [
         Colors.amber,
         Colors.blue,
@@ -21,22 +22,38 @@ class ThemeProvider extends ChangeNotifier {
       ];
 
   ThemeProvider() {
-    _loadColor();
+    _carregarPreferencias();
   }
 
   Future<void> updateColor(Color color) async {
     _primaryColor = color;
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(_keyColor, color.value);
+    await prefs.setInt(_keyColor, color.toARGB32());
   }
 
-  Future<void> _loadColor() async {
+  Future<void> definirModo(ThemeMode modo) async {
+    _modo = modo;
+    notifyListeners();
     final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_keyMode, modo.index);
+  }
+
+  Future<void> _carregarPreferencias() async {
+    final prefs = await SharedPreferences.getInstance();
+
     final colorValue = prefs.getInt(_keyColor);
     if (colorValue != null) {
       _primaryColor = Color(colorValue);
-      notifyListeners();
     }
+
+    final modeIndex = prefs.getInt(_keyMode);
+    if (modeIndex != null && modeIndex < ThemeMode.values.length) {
+      _modo = ThemeMode.values[modeIndex];
+    } else {
+      _modo = ThemeMode.dark;
+    }
+
+    notifyListeners();
   }
 }

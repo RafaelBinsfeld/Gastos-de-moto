@@ -76,7 +76,7 @@ class AppTheme {
 
   static ThemeData _construir(ColorScheme cs) {
     final corSuperficie = Color.alphaBlend(
-      cs.onSurface.withOpacity(cs.brightness == Brightness.dark ? 0.04 : 0.035),
+      cs.onSurface.withValues(alpha: cs.brightness == Brightness.dark ? 0.04 : 0.035),
       cs.surface,
     );
     final radiusPadrao = BorderRadius.circular(10);
@@ -158,7 +158,7 @@ class AppTheme {
       ),
       chipTheme: ChipThemeData(
         backgroundColor: corSuperficie,
-        selectedColor: cs.primary.withOpacity(0.22),
+        selectedColor: cs.primary.withValues(alpha: 0.22),
         side: BorderSide(color: cs.outline),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         labelStyle: GoogleFonts.manrope(fontWeight: FontWeight.w600, fontSize: 13, color: cs.onSurface),
@@ -170,44 +170,44 @@ class AppTheme {
         border: OutlineInputBorder(borderRadius: radiusPadrao, borderSide: BorderSide(color: cs.outline)),
         enabledBorder: OutlineInputBorder(borderRadius: radiusPadrao, borderSide: BorderSide(color: cs.outline)),
         focusedBorder: OutlineInputBorder(borderRadius: radiusPadrao, borderSide: BorderSide(color: cs.primary, width: 2)),
-        labelStyle: GoogleFonts.manrope(color: cs.onSurface.withOpacity(0.7)),
+        labelStyle: GoogleFonts.manrope(color: cs.onSurface.withValues(alpha: 0.7)),
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith(
           (states) => states.contains(WidgetState.selected) ? cs.primary : null,
         ),
         trackColor: WidgetStateProperty.resolveWith(
-          (states) => states.contains(WidgetState.selected) ? cs.primary.withOpacity(0.4) : null,
+          (states) => states.contains(WidgetState.selected) ? cs.primary.withValues(alpha: 0.4) : null,
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: corSuperficie,
-        indicatorColor: cs.primary.withOpacity(0.22),
+        indicatorColor: cs.primary.withValues(alpha: 0.22),
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         labelTextStyle: WidgetStateProperty.resolveWith(
           (states) => GoogleFonts.manrope(
             fontSize: 12,
             fontWeight: states.contains(WidgetState.selected) ? FontWeight.w700 : FontWeight.w500,
-            color: states.contains(WidgetState.selected) ? cs.onSurface : cs.onSurface.withOpacity(0.6),
+            color: states.contains(WidgetState.selected) ? cs.onSurface : cs.onSurface.withValues(alpha: 0.6),
           ),
         ),
         iconTheme: WidgetStateProperty.resolveWith(
           (states) => IconThemeData(
-            color: states.contains(WidgetState.selected) ? cs.primary : cs.onSurface.withOpacity(0.6),
+            color: states.contains(WidgetState.selected) ? cs.primary : cs.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ),
       navigationRailTheme: NavigationRailThemeData(
         backgroundColor: corSuperficie,
-        indicatorColor: cs.primary.withOpacity(0.22),
+        indicatorColor: cs.primary.withValues(alpha: 0.22),
         selectedIconTheme: IconThemeData(color: cs.primary),
-        unselectedIconTheme: IconThemeData(color: cs.onSurface.withOpacity(0.6)),
+        unselectedIconTheme: IconThemeData(color: cs.onSurface.withValues(alpha: 0.6)),
         selectedLabelTextStyle: GoogleFonts.manrope(fontWeight: FontWeight.w700, color: cs.onSurface),
-        unselectedLabelTextStyle: GoogleFonts.manrope(color: cs.onSurface.withOpacity(0.6)),
+        unselectedLabelTextStyle: GoogleFonts.manrope(color: cs.onSurface.withValues(alpha: 0.6)),
       ),
       listTileTheme: ListTileThemeData(
-        iconColor: cs.onSurface.withOpacity(0.7),
+        iconColor: cs.onSurface.withValues(alpha: 0.7),
         textColor: cs.onSurface,
       ),
       dividerTheme: DividerThemeData(color: cs.outlineVariant, thickness: 1, space: 1),
@@ -227,10 +227,10 @@ class AppTheme {
       titleSmall: GoogleFonts.manrope(fontSize: 14, fontWeight: FontWeight.w700, color: cor),
       bodyLarge: GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w400, color: cor),
       bodyMedium: GoogleFonts.manrope(fontSize: 14, fontWeight: FontWeight.w400, color: cor),
-      bodySmall: GoogleFonts.manrope(fontSize: 12, fontWeight: FontWeight.w400, color: cor.withOpacity(0.7)),
+      bodySmall: GoogleFonts.manrope(fontSize: 12, fontWeight: FontWeight.w400, color: cor.withValues(alpha: 0.7)),
       labelLarge: GoogleFonts.manrope(fontSize: 14, fontWeight: FontWeight.w600, color: cor),
       labelMedium: GoogleFonts.manrope(fontSize: 12, fontWeight: FontWeight.w600, color: cor),
-      labelSmall: GoogleFonts.manrope(fontSize: 11, fontWeight: FontWeight.w600, color: cor.withOpacity(0.7)),
+      labelSmall: GoogleFonts.manrope(fontSize: 11, fontWeight: FontWeight.w600, color: cor.withValues(alpha: 0.7)),
     );
   }
 }

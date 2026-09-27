@@ -29,7 +29,7 @@ class MotoAvatar extends StatelessWidget {
 
     return CircleAvatar(
       radius: raio,
-      backgroundColor: corFundo ?? cs.primary.withOpacity(0.18),
+      backgroundColor: corFundo ?? cs.primary.withValues(alpha: 0.18),
       child: Icon(Icons.two_wheeler, color: cs.primary, size: raio),
     );
   }

@@ -2,15 +2,15 @@ import 'dart:io';
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import '../database/database_helper.dart';
 
-class ExportService {
+class ExportacaoService {
   static Future<void> exportarParaCSV({
     required List<Map<String, dynamic>> abastecimentos,
     required List<Map<String, dynamic>> manutencoes,
   }) async {
     List<List<dynamic>> rows = [];
 
-    // Seção de Abastecimentos
     rows.add(["--- ABASTECIMENTOS ---"]);
     rows.add(["ID", "Data", "Valor (R\$)", "Litros", "KM Atual"]);
     for (var item in abastecimentos) {
@@ -23,9 +23,8 @@ class ExportService {
       ]);
     }
 
-    rows.add([]); // Linha em branco para separação
+    rows.add([]);
 
-    // Seção de Manutenções
     rows.add(["--- MANUTENÇÕES ---"]);
     rows.add(["ID", "Data", "Descrição", "Valor (R\$)", "KM Atual"]);
     for (var item in manutencoes) {
@@ -45,9 +44,34 @@ class ExportService {
     final file = File(path);
     await file.writeAsString(csvContent);
 
-    await Share.shareXFiles(
-      [XFile(path)],
-      text: 'Backup dos dados do aplicativo Moto Gastos',
+    // Uso correto do ShareParams no share_plus
+    await SharePlus.instance.share(
+      ShareParams(
+        files: [XFile(path)],
+        text: 'Backup dos dados do aplicativo Moto Gastos',
+      ),
     );
+  }
+
+  static Future<void> exportarAbastecimentosCsv(int? motoId) async {
+    final db = await DatabaseHelper.instance.database;
+    List<Map<String, dynamic>> list;
+    if (motoId != null) {
+      list = await db.query('abastecimentos', where: 'moto_id = ?', whereArgs: [motoId]);
+    } else {
+      list = await db.query('abastecimentos');
+    }
+    await exportarParaCSV(abastecimentos: list, manutencoes: []);
+  }
+
+  static Future<void> exportarManutencoesCsv(int? motoId) async {
+    final db = await DatabaseHelper.instance.database;
+    List<Map<String, dynamic>> list;
+    if (motoId != null) {
+      list = await db.query('manutencoes', where: 'moto_id = ?', whereArgs: [motoId]);
+    } else {
+      list = await db.query('manutencoes');
+    }
+    await exportarParaCSV(abastecimentos: [], manutencoes: list);
   }
 }

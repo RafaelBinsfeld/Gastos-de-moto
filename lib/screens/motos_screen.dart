@@ -25,7 +25,7 @@ class MotosScreen extends StatelessWidget {
 
           return Card(
             margin: const EdgeInsets.only(bottom: 10),
-            color: selecionada ? Theme.of(context).colorScheme.primary.withOpacity(0.12) : null,
+            color: selecionada ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.12) : null,
             child: ListTile(
               leading: MotoAvatar(moto: moto, raio: 22),
               title: Text(moto.nome),

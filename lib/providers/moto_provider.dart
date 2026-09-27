@@ -1,62 +1,96 @@
-import 'package:flutter/foundation.dart';
-
-import '../database/database_helper.dart';
+import 'package:flutter/material.dart';
 import '../models/moto_model.dart';
-import '../services/preferencias_service.dart';
+import '../database/database_helper.dart';
 
-/// Mantém em memória a lista de motocicletas cadastradas e qual delas está
-/// selecionada no momento, notificando as telas quando isso muda (troca de
-/// moto, moto criada/editada/excluída).
-///
-/// Se o usuário ainda não tiver nenhuma moto cadastrada, uma moto padrão
-/// ("Minha Moto") é criada automaticamente na primeira execução.
 class MotoProvider extends ChangeNotifier {
   List<Moto> _motos = [];
   Moto? _motoAtual;
-  bool _carregando = true;
+  bool _carregando = false;
 
   List<Moto> get motos => _motos;
   Moto? get motoAtual => _motoAtual;
   bool get carregando => _carregando;
-  bool get temMultiplasMotos => _motos.length > 1;
 
-  /// Carrega (ou recarrega) a lista de motos do banco de dados.
-  /// [selecionarId] força a seleção de uma moto específica (ex: recém-criada).
-  Future<void> carregar({int? selecionarId}) async {
+  // Construtor: busca as motos no banco assim que o app inicia
+  MotoProvider() {
+    carregarMotos();
+  }
+
+  // Busca as motos no SQLite e aceita o parâmetro 'selecionarId'
+  Future<void> carregarMotos({int? selecionarId}) async {
     _carregando = true;
     notifyListeners();
 
-    var motos = await DatabaseHelper.instance.obterMotos();
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final List<Map<String, dynamic>> maps = await db.query('motos');
 
-    if (motos.isEmpty) {
-      await DatabaseHelper.instance.inserirMoto(Moto(nome: 'Minha Moto'));
-      motos = await DatabaseHelper.instance.obterMotos();
+      _motos = maps.map((map) => Moto.fromMap(map)).toList();
+
+      if (_motos.isNotEmpty) {
+        if (selecionarId != null) {
+          _motoAtual = _motos.firstWhere(
+            (m) => m.id == selecionarId,
+            orElse: () => _motos.first,
+          );
+        } else if (_motoAtual == null) {
+          _motoAtual = _motos.first;
+        }
+      } else {
+        _motoAtual = null;
+      }
+    } catch (e) {
+      debugPrint('Erro ao carregar motos do banco de dados: $e');
+    } finally {
+      _carregando = false;
+      notifyListeners();
     }
+  }
 
-    _motos = motos;
+  // Alias repassando o parâmetro 'selecionarId' para compatibilidade com motos_screen.dart
+  Future<void> carregar({int? selecionarId}) => carregarMotos(selecionarId: selecionarId);
 
-    final idPreferido = selecionarId ?? _motoAtual?.id ?? await PreferenciasService.obterMotoSelecionadaId();
-    final selecionada = _motos.firstWhere(
-      (m) => m.id == idPreferido,
-      orElse: () => _motos.first,
-    );
-
-    _motoAtual = selecionada;
-    if (selecionada.id != null) {
-      await PreferenciasService.definirMotoSelecionadaId(selecionada.id!);
-    }
-
-    _carregando = false;
+  void selecionar(Moto moto) {
+    _motoAtual = moto;
     notifyListeners();
   }
 
-  /// Troca a moto atualmente selecionada, persistindo a escolha.
-  Future<void> selecionar(Moto moto) async {
-    if (_motoAtual?.id == moto.id) return;
-    _motoAtual = moto;
-    if (moto.id != null) {
-      await PreferenciasService.definirMotoSelecionadaId(moto.id!);
+  void selecionarId(int id) {
+    try {
+      _motoAtual = _motos.firstWhere((m) => m.id == id);
+    } catch (_) {
+      if (_motos.isNotEmpty) _motoAtual = _motos.first;
     }
     notifyListeners();
+  }
+
+  Future<void> adicionarMoto(Moto moto) async {
+    final db = await DatabaseHelper.instance.database;
+    await db.insert('motos', moto.toMap());
+    await carregarMotos();
+  }
+
+  Future<void> atualizarMoto(Moto moto) async {
+    final db = await DatabaseHelper.instance.database;
+    await db.update(
+      'motos',
+      moto.toMap(),
+      where: 'id = ?',
+      whereArgs: [moto.id],
+    );
+    await carregarMotos();
+  }
+
+  Future<void> deletarMoto(int id) async {
+    final db = await DatabaseHelper.instance.database;
+    await db.delete(
+      'motos',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (_motoAtual?.id == id) {
+      _motoAtual = null;
+    }
+    await carregarMotos();
   }
 }
